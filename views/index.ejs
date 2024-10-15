@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Blog Home</title>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (user) { %>
+          <li><a href="/create">Create Post</a></li>
+          <li>
+            <form action="/signout" method="POST" style="display:inline;">
+              <button type="submit">Sign Out</button>
+            </form>
+          </li>
+          <li>Welcome, <%= user.name %>!</li>
+        <% } else { %>
+          <li><a href="/signup">Sign Up</a></li>
+          <li><a href="/signin">Sign In</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </header>
+
+  <h1>Welcome to the Blog</h1>
+
+  <div class="post-list">
+    <% blogs.forEach(function(blog) { %>
+      <div class="post">
+        <h2><%= blog.title %></h2>
+        <p><%= blog.body %></p>
+        <p><small>By <%= blog.creator_name %> on <%= blog.date_created.toLocaleString() %></small></p>
+        <% if (user && blog.creator_user_id === user.user_id) { %>
+          <a href="/edit/<%= blog.blog_id %>">Edit</a>
+          <form action="/delete/<%= blog.blog_id %>" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
